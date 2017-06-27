@@ -56,21 +56,23 @@ public class MeAdapter extends RecyclerView.Adapter<MeViewHolder> {
             R.mipmap.icon_usercenter_06,
             R.mipmap.icon_usercenter_07,
             R.mipmap.icon_usercenter_08,
+            R.mipmap.icon_usercenter_09,
 //            R.mipmap.icon_usercenter_09,
-            R.mipmap.icon_usercenter_09
+//            0
     };
 
     private String[] titles = new String[]{
-            "切换车辆",
-            "车联网服务套餐",
-            "设置紧急联系人",
-            "修改PIN码",
+            "车辆",
+            "套餐",
+            "联系人",
+            "修改ID",
             "修改密码",
-            "设置发动机启动时长",
+            "设置",
             "意见反馈",
-            "常见FAQ",
+            "常见问题",
+            "版本信息",
 //            "版本信息",
-            "版本信息"
+//            ""
     };
 
     public MeAdapter(Context mContext) {

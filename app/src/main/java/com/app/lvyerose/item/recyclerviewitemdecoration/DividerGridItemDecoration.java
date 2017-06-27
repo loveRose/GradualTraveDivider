@@ -10,40 +10,43 @@ import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.view.View;
 
 /************************************************************************
- *                    .::::.                                            *
- *                  .::::::::.                                          *
- *                 :::::::::::  FUCK YOU                                *
- *             ..:::::::::::'                                           *
- *           '::::::::::::'                                             *
- *             .::::::::::                                              *
- *        '::::::::::::::..                                             *
- *             ..::::::::::::.                                          *
- *           ``::::::::::::::::                                         *
- *            ::::``:::::::::'        .:::.                             *
- *           ::::'   ':::::'       .::::::::.                           *
- *         .::::'      ::::     .:::::::'::::.                          *
- *        .:::'       :::::  .:::::::::' ':::::.                        *
- *       .::'        :::::.:::::::::'      ':::::.                      *
- *      .::'         ::::::::::::::'         ``::::.                    *
- *  ...:::           ::::::::::::'              ``::.                   *
+ * .::::.                                            *
+ * .::::::::.                                          *
+ * :::::::::::  FUCK YOU                                *
+ * ..:::::::::::'                                           *
+ * '::::::::::::'                                             *
+ * .::::::::::                                              *
+ * '::::::::::::::..                                             *
+ * ..::::::::::::.                                          *
+ * ``::::::::::::::::                                         *
+ * ::::``:::::::::'        .:::.                             *
+ * ::::'   ':::::'       .::::::::.                           *
+ * .::::'      ::::     .:::::::'::::.                          *
+ * .:::'       :::::  .:::::::::' ':::::.                        *
+ * .::'        :::::.:::::::::'      ':::::.                      *
+ * .::'         ::::::::::::::'         ``::::.                    *
+ * ...:::           ::::::::::::'              ``::.                   *
  * ```` ':.          ':::::::::'                  ::::..                *
- *                    '.:::::'                    ':'````..             *
- *              ━━━━━━━━━━━━━━━━━━━━━                                   *
- ************************************************************************
- *
+ * '.:::::'                    ':'````..             *
+ * ━━━━━━━━━━━━━━━━━━━━━                                   *
+ * ***********************************************************************
+ * <p>
  * 项目名称：RecyclerViewItemDecoration
- * 类描述： 
+ * 类描述：
  * 创建人：lvyerose
  * 邮箱：lvyerose@163.com
  * 创建时间：17/6/26
- *
+ * <p>
  * 修改人：
  * 修改时间：
  * 修改备注：
- *
- *  ......
+ * <p>
+ * ......
  */
 public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
+    public static final int DIVIDER_TYPE_正常 = 0;
+    public static final int DIVIDER_TYPE_START = 1;
+    public static final int DIVIDER_TYPE_END = 2;
 
     private Drawable mDivider;
 
@@ -70,6 +73,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 返回当前列数
+     * 666
      *
      * @param parent
      * @return
@@ -95,36 +99,42 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
             final View child = parent.getChildAt(i);
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
-            if ((i + spanCount) % spanCount == 0) {
-                //左边端点渐变绘制
-                final int left = child.getLeft() - params.leftMargin;
-                final int right = child.getRight() + params.rightMargin
-                        + startHorizontalDivider.getIntrinsicWidth();
-                final int top = child.getBottom() + params.bottomMargin;
-                final int bottom = top + startHorizontalDivider.getIntrinsicHeight();
-                startHorizontalDivider.setBounds(left, top, right, bottom);
-                startHorizontalDivider.draw(c);
-            } else if ((i + 1) % spanCount == 0) {
-                //横向末端渐变绘制
-                final int left = child.getLeft() - params.leftMargin;
-                final int right = child.getRight() + params.rightMargin
-                        + endHorizontalDivider.getIntrinsicWidth();
-                final int top = child.getBottom() + params.bottomMargin;
-                final int bottom = top + endHorizontalDivider.getIntrinsicHeight();
-                endHorizontalDivider.setBounds(left, top, right, bottom);
-                endHorizontalDivider.draw(c);
-            } else {
-                //无渐变绘制
-                final int left = child.getLeft() - params.leftMargin;
-                final int right = child.getRight() + params.rightMargin
-                        + mDivider.getIntrinsicWidth();
-                final int top = child.getBottom() + params.bottomMargin;
-                final int bottom = top + mDivider.getIntrinsicHeight();
-                mDivider.setBounds(left, top, right, bottom);
-                mDivider.draw(c);
+            final int left;
+            final int right;
+            final int top;
+            final int bottom;
+            switch (dividerType(i, spanCount, childCount, true)) {
+                case DIVIDER_TYPE_正常:
+                    //无渐变绘制
+                    left = child.getLeft() - params.leftMargin;
+                    right = child.getRight() + params.rightMargin
+                            + mDivider.getIntrinsicWidth();
+                    top = child.getBottom() + params.bottomMargin;
+                    bottom = top + mDivider.getIntrinsicHeight();
+                    mDivider.setBounds(left, top, right, bottom);
+                    mDivider.draw(c);
+                    break;
+                case DIVIDER_TYPE_START:
+                    //左边端点渐变绘制
+                    left = child.getLeft() - params.leftMargin;
+                    right = child.getRight() + params.rightMargin
+                            + startHorizontalDivider.getIntrinsicWidth();
+                    top = child.getBottom() + params.bottomMargin;
+                    bottom = top + startHorizontalDivider.getIntrinsicHeight();
+                    startHorizontalDivider.setBounds(left, top, right, bottom);
+                    startHorizontalDivider.draw(c);
+                    break;
+                case DIVIDER_TYPE_END:
+                    //横向末端渐变绘制
+                    left = child.getLeft() - params.leftMargin;
+                    right = child.getRight() + params.rightMargin
+                            + endHorizontalDivider.getIntrinsicWidth();
+                    top = child.getBottom() + params.bottomMargin;
+                    bottom = top + endHorizontalDivider.getIntrinsicHeight();
+                    endHorizontalDivider.setBounds(left, top, right, bottom);
+                    endHorizontalDivider.draw(c);
+                    break;
             }
-
-
         }
     }
 
@@ -138,38 +148,45 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
         final int childCount = parent.getChildCount();
         int spanCount = getSpanCount(parent);
         for (int i = 0; i < childCount; i++) {
+            if (isLastColumn(parent, i, spanCount, childCount)) {// 如果是最后一行，则不需要绘制底部
+                continue;
+            }
             final View child = parent.getChildAt(i);
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
+            final int top;
+            final int bottom;
+            final int left;
+            final int right;
+            switch (dividerType(i, spanCount, childCount, false)) {
+                case DIVIDER_TYPE_正常:
+                    top = child.getTop() - params.topMargin;
+                    bottom = child.getBottom() + params.bottomMargin;
+                    left = child.getRight() + params.rightMargin;
+                    right = left + mDivider.getIntrinsicWidth();
 
-            if (i < spanCount) {
-                //顶部纵向渐变绘制
-                final int top = child.getTop() - params.topMargin;
-                final int bottom = child.getBottom() + params.bottomMargin;
-                final int left = child.getRight() + params.rightMargin;
-                final int right = left + startVerticalDivider.getIntrinsicWidth();
+                    mDivider.setBounds(left, top, right, bottom);
+                    mDivider.draw(c);
+                    break;
+                case DIVIDER_TYPE_START:
+                    top = child.getTop() - params.topMargin;
+                    bottom = child.getBottom() + params.bottomMargin;
+                    left = child.getRight() + params.rightMargin;
+                    right = left + startVerticalDivider.getIntrinsicWidth();
+                    startVerticalDivider.setBounds(left, top, right, bottom);
+                    startVerticalDivider.draw(c);
+                    break;
+                case DIVIDER_TYPE_END:
+                    top = child.getTop() - params.topMargin;
+                    bottom = child.getBottom() + params.bottomMargin;
+                    left = child.getRight() + params.rightMargin;
+                    right = left + endVerticalDivider.getIntrinsicWidth();
 
-                startVerticalDivider.setBounds(left, top, right, bottom);
-                startVerticalDivider.draw(c);
-            } else if (i >= childCount - spanCount) {
-                //底部纵向渐变绘制
-                final int top = child.getTop() - params.topMargin;
-                final int bottom = child.getBottom() + params.bottomMargin;
-                final int left = child.getRight() + params.rightMargin;
-                final int right = left + endVerticalDivider.getIntrinsicWidth();
-
-                endVerticalDivider.setBounds(left, top, right, bottom);
-                endVerticalDivider.draw(c);
-            } else {
-                //无渐变绘制
-                final int top = child.getTop() - params.topMargin;
-                final int bottom = child.getBottom() + params.bottomMargin;
-                final int left = child.getRight() + params.rightMargin;
-                final int right = left + mDivider.getIntrinsicWidth();
-
-                mDivider.setBounds(left, top, right, bottom);
-                mDivider.draw(c);
+                    endVerticalDivider.setBounds(left, top, right, bottom);
+                    endVerticalDivider.draw(c);
+                    break;
             }
+
         }
     }
 
@@ -207,11 +224,11 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
         LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             if (childCount % spanCount == 0) { // 刚好排满
-                if (pos >= (childCount - spanCount)) {
+                if (pos >= (childCount - spanCount)) {//最后一行
                     return true;
                 }
-            } else { //排不满的
-                int count = childCount - spanCount;
+            } else { //排不满的 最后一行
+                int count = childCount - childCount % spanCount;
                 if (pos >= count) {
                     return true;
                 }
@@ -219,6 +236,27 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
 
         }
         return false;
+    }
+
+    private int dividerType(int pos, int spanCount, int childCount, boolean isHorizontal) {
+        if (isHorizontal) {
+            if ((pos + spanCount) % spanCount == 0) {
+                return DIVIDER_TYPE_START;
+            } else if ((pos + 1) % spanCount == 0) {
+                return DIVIDER_TYPE_END;
+            } else {
+                return DIVIDER_TYPE_正常;
+            }
+        } else {
+            //竖线判断状态  是上起点还是下终点还是中间正常状态
+            if (pos < spanCount) {
+                return DIVIDER_TYPE_START;
+            } else if (pos >= childCount - (childCount % spanCount == 0 ? spanCount : childCount % spanCount)) {/*最后一行 原本减去spanCount*/
+                return DIVIDER_TYPE_END;
+            } else {
+                return DIVIDER_TYPE_正常;
+            }
+        }
     }
 
     @Override
