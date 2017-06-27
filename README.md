@@ -1,0 +1,2 @@
+# GradualTraveDivider
+RecyclerView的井格分割线，断点带渐变效果
